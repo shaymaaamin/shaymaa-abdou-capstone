@@ -1,0 +1,30 @@
+@import "../../styles/partials/vars";
+
+.contact-list {
+  width: 25%;
+  box-shadow: $card-shadow;
+  border-radius: $border-radius;
+
+  padding: 1rem;
+  margin: 0 $gutter-sm;
+
+  &__item {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: calc($gutter-sm / 4);
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-grey;
+      display: flex;
+
+      &::after {
+        content: "➡️";
+        margin-left: auto;
+      }
+    }
+  }
+}

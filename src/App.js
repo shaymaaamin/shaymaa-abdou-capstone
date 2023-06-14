@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
 
-function App() {
+import { HashRouter, Route, Routes } from "react-router-dom";
+// import { List } from "./List";
+import EmployeeForm from "./components/EmployeeForm/EmployeeForm";
+
+import Topnav from "./components/Topnav/Topnav";
+import ScrollToTop from "./helpers/ScrollToTop";
+
+import HomePage from "./pages/HomePage";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <HashRouter>
+        <Topnav />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/employees" element={<HomePage />} />
+          <Route path="/assets" element={<HomePage />} />
+          <Route path="/jobs" element={<HomePage />} />
+          <Route path="/administration" element={<HomePage />} />
+
+          <Route path={`/employees/add`} element={<EmployeeForm />} />
+          <Route path={`/employees/edit/:id`} element={<EmployeeForm />} />
+        </Routes>
+      </HashRouter>
     </div>
   );
 }
-
-export default App;
