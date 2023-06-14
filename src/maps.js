@@ -10,7 +10,7 @@ export const initializeMap = () => {
 
 export const loadGoogleMapsAPI = () => {
     return new Promise((resolve, reject) => {
-        const API_KEY = process.env.GOOGLE_API_KEY;
+        const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
         const script = document.querySelector('#googleMapsScript');
         if (!script) {
             const script = document.createElement("script");
