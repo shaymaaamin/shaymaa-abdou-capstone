@@ -12,8 +12,6 @@ export const getAssets = () =>
   ]);
 
 export const getEmployees = () => axios.get(`/employees`);
-export const getEmployee = (id) => axios.get(`/employees/${id}`);
-
-export const updatEmployee = (id, employee) =>
-  axios.put(`/employees/${id}`, employee);
 export const addEmployee = (employee) => axios.post(`/employees`, employee);
+export const updatEmployee = (id, employee) => axios.put(`/employees/${id}`, employee);
+export const deleteEmployee = (id) => axios.delete(`/employees/${id}`);
