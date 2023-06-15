@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./ContactList.scss";
 import { addMarker } from "../../maps";
+import { List, Image, Card } from "semantic-ui-react";
 
 export default function ContactList({ employees, map }) {
     useEffect(() => {
@@ -21,12 +22,21 @@ export default function ContactList({ employees, map }) {
     }
 
     return (
-        <ul className="contact-list">
-            {employees.map((employee, idx) => (
-                <li className="contact-list__item" key={idx}>
-                    {getStatus(employee)} {employee.firstName} {employee.lastName}
-                </li>
-            ))}
-        </ul>
+        <Card style={{ margin: '0 1rem' }}>
+            <Card.Header as='h3'>Employees</Card.Header>
+            <Card.Content>
+                <List relaxed>
+                    {employees.map((employee, idx) => (
+                        <List.Item key={idx}>
+                            <List.Content>
+                                <List.Header>
+                                    {getStatus(employee)} {employee.firstName} {employee.lastName}
+                                </List.Header>
+                            </List.Content>
+                        </List.Item>
+                    ))}
+                </List>
+            </Card.Content>
+        </Card>
     );
 };

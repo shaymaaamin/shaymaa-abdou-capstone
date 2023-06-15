@@ -1,30 +1,58 @@
+import { Button, Card, List } from "semantic-ui-react";
 import "./Sidebar.scss";
+import { useEffect, useState } from "react";
+import api from "../../api";
+import CreateAssignment from "../CreateAssignment/CreateAssignment";
 
-export default function Sidebar() {
-    return <div className="sidebar">
-        <form className="sidebar__form">
-            <div className="sidebar__form-group">
-                <label htmlFor="search">Search</label>
-                <input type="text" id="search" name="search" />
-            </div>
-            <div className="sidebar__form-group">
-                <label htmlFor="filter">Filter</label>
-                <select id="filter" name="filter" defaultValue="active">
-                    <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
-            <div className="sidebar__form-group">
-                <label htmlFor="sort">Sort By</label>
-                <select id="sort" name="sort" defaultValue="priority">
-                    <option value="priority">Priority</option>
-                </select>
-                <select id="direction" name="direction" defaultValue="descending">
-                    <option value="ascending">Ascending</option>
-                    <option value="descending">Descending</option>
-                </select>
-            </div>
-        </form>
-    </div>;
+export default function Sidebar({ jobs }) {
+    const [error, setError] = useState(null);
+
+    const [assets, setAssets] = useState([]);
+    const [faults, setFaults] = useState([]);
+    const [priorities, setPriorities] = useState([]);
+
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        api.assets.get().then(data => setAssets(data.map(({ id, name }) => ({ value: id, text: name })))).catch(setError);
+        api.faults.get().then(data => setFaults(data.map(({ id, name, code }) => ({ value: id, text: `${name} - ${code}` })))).catch(setError);
+        api.priorities.get().then(data => setPriorities(data.map(({ id, name }) => ({ value: id, text: name })))).catch(setError);
+    }, []);
+
+    const getValue = (item, key) => {
+        switch (key) {
+            case 'asset':
+                return assets.find(({ value }) => value === item.asset)?.text;
+            case 'fault':
+                return faults.find(({ value }) => value === item.fault)?.text;
+            case 'priority':
+                return priorities.find(({ value }) => value === item.priority)?.text;
+            default:
+                return item[key];
+        }
+    }
+
+    return (
+        <Card>
+            <CreateAssignment open={open} onClose={() => setOpen(false)} />
+            <Card.Content>
+                <List>
+                    {
+                        jobs.map((job, idx) => (
+                            <List.Item key={idx}>
+                                <Card>
+                                    <List.Content>
+                                        <List.Header>{getValue(job, 'asset')}</List.Header>
+                                        <List.Description>{getValue(job, 'fault')}</List.Description>
+                                        <List.Description>{getValue(job, 'priority')}</List.Description>
+                                        <Button type="button" color="blue" content="Assign" onClick={() => setOpen(true)} />
+                                    </List.Content>
+                                </Card>
+                            </List.Item>
+                        ))
+                    }
+                </List>
+            </Card.Content>
+        </Card>
+    );
 }

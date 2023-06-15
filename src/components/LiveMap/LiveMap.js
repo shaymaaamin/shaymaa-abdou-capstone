@@ -6,7 +6,7 @@ export default function LiveMap({ map, assets }) {
   useEffect(() => {
     if (!window.google) return;
     assets.forEach((asset) => {
-      addMarker(map, asset.location, asset.name, "assets/images/home_pin.png");
+      addMarker(map, { lat: asset.lat, lng: asset.lng }, asset.name, "assets/images/home_pin.png");
     });
   }, [assets, map]);
 
