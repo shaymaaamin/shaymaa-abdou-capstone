@@ -37,17 +37,31 @@ function AddEditForm({ header, error, mode, fields, item, dispatch }) {
                 <ErrorMessage error={error} />
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     {
-                        fields.map(({ key, label }) => {
-                            return (
-                                <Form.Field key={key} error={!!errors[key]}>
-                                    <Form.Input
-                                        id={`form-field-input-${key}`}
-                                        label={label}
-                                        placeholder={label}
-                                        input={register(key, { required: `${label} is Required!` })}
-                                    />
-                                </Form.Field>
-                            )
+                        fields.map(({ key, label, type, options }) => {
+                            let field;
+                            switch (type) {
+                                case 'select':
+                                    field = (
+                                        <Form.Dropdown
+                                            fluid
+                                            label={label}
+                                            options={options}
+                                            selection
+                                            search
+                                        />
+                                    );
+                                    break;
+                                default:
+                                    field = (
+                                        <Form.Input
+                                            id={`form-field-input-${key}`}
+                                            label={label}
+                                            placeholder={label}
+                                            input={register(key, { required: `${label} is Required!` })}
+                                        />
+                                    )
+                            }
+                            return (<Form.Field key={key} error={!!errors[key]}>{field}</Form.Field>)
                         })
                     }
                     <Modal.Actions>

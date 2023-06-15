@@ -7,6 +7,8 @@ import ScrollToTop from "./helpers/ScrollToTop";
 
 import HomePage from "./pages/HomePage";
 import Employees from "./pages/Employees";
+import Assets from "./pages/Assets";
+import Jobs from "./pages/Jobs";
 
 export default function App() {
   return (
@@ -17,8 +19,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/employees" element={<Employees />} />
-          <Route path="/assets" element={<HomePage />} />
-          <Route path="/jobs" element={<HomePage />} />
+          <Route path="/assets" element={<Assets />} />
+          <Route path="/jobs" element={<Jobs />} />
           <Route path="/administration" element={<HomePage />} />
         </Routes>
       </HashRouter>

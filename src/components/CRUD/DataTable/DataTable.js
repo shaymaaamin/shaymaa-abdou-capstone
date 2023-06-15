@@ -18,9 +18,15 @@ function DataTable({ data, fields, dispatch }) {
                 {data.map((item) => (
                     <Table.Row key={item.id}>
                         <Table.Cell>{item.id}</Table.Cell>
-                        {fields.map(({ key }) => (
-                            <Table.Cell key={key}>{item[key]}</Table.Cell>
-                        ))}
+                        {fields.map(({ key, options }) => {
+                            let value = item[key];
+                            if (options) {
+                                value = options.find(({ value }) => value === item[key])?.text || value;
+                            }
+                            return (
+                                <Table.Cell key={key}>{value}</Table.Cell>
+                            )
+                        })}
                         <Table.Cell collapsing textAlign="center">
                             <Button color="blue" icon="edit" onClick={(e) => dispatch({ mode: 'edit', item })} />
                         </Table.Cell>

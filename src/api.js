@@ -3,15 +3,30 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 axios.interceptors.response.use((response) => response.data);
 
-// export const getEmployees = () => axios.get("/employees");
-// export const getAssets = () => axios.get("/assets");
-export const getAssets = () =>
-  Promise.resolve([
-    { name: "Asset 1", location: { lat: 43.6339676, lng: -79.394823 } },
-    { name: "Asset 2", location: { lat: 43.6369865, lng: -79.410435 } },
-  ]);
+const crudOperation = (path) => {
+    return {
+        get: () => axios.get(path),
+        add: (data) => axios.post(path, data),
+        update: (id, data) => axios.put(`${path}/${id}`, data),
+        delete: (id) => axios.delete(`${path}/${id}`),
+    }
+}
 
-export const getEmployees = () => axios.get(`/employees`);
-export const addEmployee = (employee) => axios.post(`/employees`, employee);
-export const updatEmployee = (id, employee) => axios.put(`/employees/${id}`, employee);
-export const deleteEmployee = (id) => axios.delete(`/employees/${id}`);
+const assets = crudOperation('assets');
+const employees = crudOperation('employees');
+const faults = crudOperation('faults');
+const priorities = crudOperation('priorities');
+const jobs = crudOperation('jobs');
+const types = crudOperation('types');
+const statuses = crudOperation('statuses');
+
+export default {
+    assets,
+    employees,
+    jobs,
+
+    faults,
+    priorities,
+    types,
+    statuses,
+}

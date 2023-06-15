@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "102 Fort York",
+        "type": "Townhouse",
+        "lat": 43.6339676,
+        "lng": -79.394823
+    },
+    {
+        "id": 2,
+        "name": "Michelle",
+        "type": "Condo",
+        "lat": 43.6369865,
+        "lng": -79.410435
+    }
+]

@@ -3,19 +3,21 @@ import api from "../api";
 
 import CRUD from "../components/CRUD/CRUD";
 
-function Employees() {
+function Assets() {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
 
     const fields = [
-        { key: 'firstName', label: 'First Name' },
-        { key: 'lastName', label: 'Last Name' }
+        { key: 'name', label: 'Name' },
+        { key: 'lat', label: 'Latitude' },
+        { key: 'lng', label: 'Longitude' },
+        { key: 'type', label: 'Type' }
     ];
 
-    const getTitle = (item) => item ? `${item.firstName} ${item.lastName}` : '';
+    const getTitle = (item) => item ? `${item.name}` : '';
 
     const loadData = () =>
-        api.employees.get()
+        api.assets.get()
             .then((data) => setData(data))
             .catch((error) => setError(error.message));
 
@@ -24,15 +26,15 @@ function Employees() {
         let operation = Promise.resolve();
         switch (mode) {
             case 'add':
-                operation = api.employees.add(item);
+                operation = api.assets.add(item);
                 break;
 
             case 'edit':
-                operation = api.employees.update(item.id, item);
+                operation = api.assets.update(item.id, item);
                 break;
 
             case 'delete':
-                operation = api.employees.delete(item.id);
+                operation = api.assets.delete(item.id);
                 break;
 
             default:
@@ -43,7 +45,7 @@ function Employees() {
 
     return (
         <CRUD
-            header="Employee"
+            header="Asset"
             data={data}
             fields={fields}
             error={error}
@@ -54,4 +56,4 @@ function Employees() {
         />
     )
 }
-export default Employees;
+export default Assets;
