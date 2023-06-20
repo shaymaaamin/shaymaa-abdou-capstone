@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../api";
+import * as api from "../api";
 
 import CRUD from "../components/CRUD/CRUD";
 
@@ -8,11 +8,13 @@ function Employees() {
     const [error, setError] = useState(null);
 
     const fields = [
-        { key: 'firstName', label: 'First Name' },
-        { key: 'lastName', label: 'Last Name' }
+        { key: 'first_name', label: 'First Name' },
+        { key: 'last_name', label: 'Last Name' },
+        { key: 'email_address', label: 'Email' },
+        { key: 'phone_number', label: 'Phone' },
     ];
 
-    const getTitle = (item) => item ? `${item.firstName} ${item.lastName}` : '';
+    const getTitle = (item) => item ? `${item.first_name} ${item.last_name}` : '';
 
     const loadData = () =>
         api.employees.get()

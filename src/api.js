@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 axios.interceptors.response.use((response) => response.data);
 
-const crudOperation = (path) => {
+const crud = (path) => {
     return {
         get: () => axios.get(path),
         add: (data) => axios.post(path, data),
@@ -12,21 +12,12 @@ const crudOperation = (path) => {
     }
 }
 
-const assets = crudOperation('assets');
-const employees = crudOperation('employees');
-const faults = crudOperation('faults');
-const priorities = crudOperation('priorities');
-const jobs = crudOperation('jobs');
-const types = crudOperation('types');
-const statuses = crudOperation('statuses');
+export const assets = crud('assets');
+export const employees = crud('employees');
+export const jobs = crud('jobs');
 
-export default {
-    assets,
-    employees,
-    jobs,
-
-    faults,
-    priorities,
-    types,
-    statuses,
-}
+export const faults = crud('faults');
+export const priorities = crud('priorities');
+export const skills = crud('skills');
+export const statuses = crud('statuses');
+export const types = crud('types');

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api";
+import * as api from "../api";
 
 import CRUD from "../components/CRUD/CRUD";
 
@@ -12,19 +12,20 @@ function Jobs() {
     const [priorities, setPriorities] = useState([]);
 
     useEffect(() => {
-        api.assets.get().then(data => setAssets(data.map(({ id, name }) => ({ value: id, text: name })))).catch(setError);
-        api.faults.get().then(data => setFaults(data.map(({ id, name, code }) => ({ value: id, text: `${name} - ${code}` })))).catch(setError);
-        api.priorities.get().then(data => setPriorities(data.map(({ id, name }) => ({ value: id, text: name })))).catch(setError);
+        api.assets.get().then(data => setAssets(data.map(({ id, name }) => ({ value: id, label: name })))).catch(setError);
+        api.faults.get().then(data => setFaults(data.map(({ id, name, code }) => ({ value: id, label: `${name} - ${code}` })))).catch(setError);
+        api.priorities.get().then(data => setPriorities(data.map(({ id, name }) => ({ value: id, label: name })))).catch(setError);
     }, [])
 
     const fields = [
-        { key: 'asset', label: 'Asset', type: 'select', options: assets },
-        { key: 'fault', label: 'Fault', type: 'select', options: faults },
-        { key: 'priority', label: 'Priority', type: 'select', options: priorities },
-        { key: 'date', label: 'Date', type: 'date' }
+        { key: 'title', label: 'Title' },
+        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'asset_id', label: 'Asset', type: 'select', options: assets },
+        { key: 'fault_id', label: 'Fault', type: 'select', options: faults },
+        { key: 'priority_id', label: 'Priority', type: 'select', options: priorities },
     ];
 
-    const getTitle = (item) => item ? `${item.name}` : '';
+    const getTitle = (item) => item ? `${item.title}` : '';
 
     const loadData = () =>
         api.jobs.get()

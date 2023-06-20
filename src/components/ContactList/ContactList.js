@@ -1,15 +1,25 @@
-import React, { useEffect } from "react";
-import "./ContactList.scss";
+import React, { useEffect, useState } from "react";
+import { Card, Header, Icon, Menu } from "semantic-ui-react";
 import { addMarker } from "../../maps";
-import { List, Image, Card } from "semantic-ui-react";
+
 
 export default function ContactList({ employees, map }) {
+    const [markers, setMarkers] = useState([]);
+    const [selectedEmployee, selectEmployee] = useState(null);
+
     useEffect(() => {
         if (!window.google) return;
+        markers.forEach(marker => marker.setMap(null));
+
+        const newMarkers = [];
         employees.forEach((employee) => {
-            addMarker(map, employee.location, employee.name, "assets/images/user_pin.png");
+            const icon = employee?.id === selectedEmployee?.id ? "assets/images/user_pin_selected.png" : "assets/images/user_pin.png";
+            const marker = addMarker(map, { lat: employee.lat, lng: employee.lng }, employee.first_name + ' ' + employee.last_name, icon);
+            marker.employee = employee;
+            newMarkers.push(marker);
         });
-    }, [employees, map]);
+        setMarkers(newMarkers);
+    }, [employees, map, selectedEmployee]);
 
     const getStatus = (employee) => {
         switch (employee.status) {
@@ -22,21 +32,16 @@ export default function ContactList({ employees, map }) {
     }
 
     return (
-        <Card style={{ margin: '0 1rem' }}>
-            <Card.Header as='h3'>Employees</Card.Header>
-            <Card.Content>
-                <List relaxed>
-                    {employees.map((employee, idx) => (
-                        <List.Item key={idx}>
-                            <List.Content>
-                                <List.Header>
-                                    {getStatus(employee)} {employee.firstName} {employee.lastName}
-                                </List.Header>
-                            </List.Content>
-                        </List.Item>
-                    ))}
-                </List>
-            </Card.Content>
+        <Card centered={true} raised={true}>
+            <Header as='h3' textAlign="center">Employees</Header>
+            <Menu pointing vertical fluid={true} >
+                {employees.map((employee, idx) => (
+                    <Menu.Item key={idx} onClick={() => selectEmployee(employee)}>
+                        <Icon name='angle right' />
+                        <div>{getStatus(employee)} {employee.first_name} {employee.last_name}</div>
+                    </Menu.Item>
+                ))}
+            </Menu>
         </Card>
     );
 };

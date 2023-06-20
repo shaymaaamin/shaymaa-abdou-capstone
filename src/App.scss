@@ -1,0 +1,23 @@
+.ui {
+    &.header {
+        margin-top: 1rem !important;
+    }
+
+    &.grid {
+        .row {
+            padding: 1rem !important;
+        }
+
+        .column {
+            display: flex !important;
+        }
+    }
+
+    &.card {
+        align-self: stretch !important;
+    }
+}
+
+a:hover {
+    color: white;
+}

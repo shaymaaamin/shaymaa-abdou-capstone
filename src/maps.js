@@ -33,4 +33,5 @@ export const addMarker = (map, position, title, icon) => {
         infoWindows.forEach((iw) => iw.close());
         infoWindow.open(map, marker);
     });
+    return marker;
 }

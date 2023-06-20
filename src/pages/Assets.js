@@ -1,5 +1,5 @@
-import { useState } from "react";
-import api from "../api";
+import { useEffect, useState } from "react";
+import * as api from "../api";
 
 import CRUD from "../components/CRUD/CRUD";
 
@@ -7,14 +7,23 @@ function Assets() {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
 
+    const [types, setTypes] = useState([]);
+
+    useEffect(() => {
+        api.types.get().then(data => setTypes(data.map(({ id, name }) => ({ value: id, label: name })))).catch(setError);
+    }, []);
+
     const fields = [
         { key: 'name', label: 'Name' },
-        { key: 'lat', label: 'Latitude' },
-        { key: 'lng', label: 'Longitude' },
-        { key: 'type', label: 'Type' }
+        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'type', label: 'Type', type: 'select', options: types },
+        { key: 'lat', label: 'lat' },
+        { key: 'lng', label: 'lng' },
     ];
 
     const getTitle = (item) => item ? `${item.name}` : '';
+
+
 
     const loadData = () =>
         api.assets.get()

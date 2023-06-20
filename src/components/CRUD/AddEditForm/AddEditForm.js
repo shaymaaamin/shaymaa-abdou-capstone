@@ -1,27 +1,30 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Button, Form, Modal } from "semantic-ui-react";
+import { useForm } from '@mantine/form';
+import { Button, Modal } from "semantic-ui-react";
+import { TextInput, Textarea, Select } from '@mantine/core';
+
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 function AddEditForm({ header, error, mode, fields, item, dispatch }) {
-    const initialState = fields.reduce((acc, { key }) => ({ ...acc, [key]: null }), {});
+    const initialValues = fields.reduce((acc, { key }) => ({ ...acc, [key]: '' }), { ...item });
 
-    const { register, handleSubmit, reset, formState: { errors }, } = useForm(initialState);
+    const { getInputProps, onSubmit, setValues } = useForm({ initialValues });
+
 
     useEffect(() => {
-        reset(item);
+        setValues({ ...initialValues, ...item });
     }, [item]);
 
     // Form onSubmit
-    const onSubmit = (item) => {
+    const handleSubmit = (item) => {
         dispatch({ mode, item, success: true });
-        reset(initialState);
+        setValues({ ...initialValues, ...item });
     };
 
     // Modal onClose
     const onClose = () => {
         dispatch({ mode: null, item, success: false });
-        reset(initialState);
+        setValues({ ...initialValues, ...item });
     };
 
     return (
@@ -35,35 +38,45 @@ function AddEditForm({ header, error, mode, fields, item, dispatch }) {
             <Modal.Header>{item?.id ? 'Edit' : 'Add'} {header}</Modal.Header>
             <Modal.Content>
                 <ErrorMessage error={error} />
-                <Form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={onSubmit(handleSubmit)}>
                     {
                         fields.map(({ key, label, type, options }) => {
                             let field;
                             switch (type) {
                                 case 'select':
                                     field = (
-                                        <Form.Dropdown
-                                            fluid
+                                        <Select
+                                            data={options}
+                                            placeholder={label}
                                             label={label}
-                                            options={options}
-                                            selection
-                                            search
+                                            {...getInputProps(key)}
+                                        />
+                                    );
+                                    break;
+                                case 'textarea':
+                                    field = (
+                                        <Textarea
+                                            placeholder={label}
+                                            label={label}
+                                            {...getInputProps(key)}
                                         />
                                     );
                                     break;
                                 default:
                                     field = (
-                                        <Form.Input
+                                        <TextInput
                                             id={`form-field-input-${key}`}
                                             label={label}
                                             placeholder={label}
-                                            input={register(key, { required: `${label} is Required!` })}
+                                            withAsterisk
+                                            {...getInputProps(key)}
                                         />
-                                    )
+                                    );
                             }
-                            return (<Form.Field key={key} error={!!errors[key]}>{field}</Form.Field>)
+                            return <div key={key}>{field}</div>;
                         })
                     }
+                    <br />
                     <Modal.Actions>
                         <Button
                             type="button"
@@ -80,7 +93,7 @@ function AddEditForm({ header, error, mode, fields, item, dispatch }) {
                             icon="checkmark"
                         />
                     </Modal.Actions>
-                </Form>
+                </form>
             </Modal.Content>
         </Modal>
     );

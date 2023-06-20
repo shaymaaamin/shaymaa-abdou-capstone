@@ -21,7 +21,7 @@ function DataTable({ data, fields, dispatch }) {
                         {fields.map(({ key, options }) => {
                             let value = item[key];
                             if (options) {
-                                value = options.find(({ value }) => value === item[key])?.text || value;
+                                value = options.find(({ value }) => value === item[key])?.label || value;
                             }
                             return (
                                 <Table.Cell key={key}>{value}</Table.Cell>

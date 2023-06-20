@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import Employees from "./pages/Employees";
 import Assets from "./pages/Assets";
 import Jobs from "./pages/Jobs";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -21,7 +22,8 @@ export default function App() {
           <Route path="/employees" element={<Employees />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/jobs" element={<Jobs />} />
-          <Route path="/administration" element={<HomePage />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/:key" element={<Admin />} />
         </Routes>
       </HashRouter>
     </div>
