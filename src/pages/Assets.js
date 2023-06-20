@@ -11,7 +11,7 @@ function Assets() {
 
     useEffect(() => {
         api.lookups.get().then(data => {
-            const types = data.filter(({ kind }) => kind === 'type').map(({ id, name }) => ({ value: id, label: name }));
+            const types = data.filter(({ kind }) => kind === 'asset_type').map(({ id, name }) => ({ value: id, label: name }));
             setTypes(types);
         }).catch(setError);
     }, []);

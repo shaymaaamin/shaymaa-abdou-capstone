@@ -7,7 +7,7 @@ function Lookups() {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
 
-    const options = ['fault', 'priority', 'skill', 'status', 'type'];
+    const options = ['fault', 'priority', 'skill', 'status', 'asset_type'];
     const fields = [
         { key: 'kind', label: 'Kind', type: 'select', options },
         { key: 'name', label: 'Name' },
