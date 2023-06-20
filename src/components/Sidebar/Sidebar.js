@@ -22,8 +22,12 @@ export default function Sidebar({ selectedAsset, selectAsset, assets }) {
     ];
 
     useEffect(() => {
-        api.faults.get().then(data => setFaults(data.map(({ id, name, code }) => ({ value: id, label: `${name} - ${code}` })))).catch(setError);
-        api.priorities.get().then(data => setPriorities(data.map(({ id, name }) => ({ value: id, label: name })))).catch(setError);
+        api.lookups.get().then(data => {
+            const faults = data.filter(({ kind }) => kind === 'fault').map(({ id, name }) => ({ value: id, label: name }));
+            const priorities = data.filter(({ kind }) => kind === 'priority').map(({ id, name }) => ({ value: id, label: name }));
+            setFaults(faults);
+            setPriorities(priorities);
+        }).catch(setError);
     }, []);
 
     const reportFault = () => {

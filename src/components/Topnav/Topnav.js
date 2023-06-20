@@ -26,8 +26,8 @@ export default function Topnav() {
           <NavLink to="/jobs" className={linkClassName}>
             Jobs
           </NavLink>
-          <NavLink to="/admin" className={linkClassName}>
-            Admin
+          <NavLink to="/lookups" className={linkClassName}>
+            Lookups
           </NavLink>
         </div>
         <div className="divider divider--no-margin"></div>

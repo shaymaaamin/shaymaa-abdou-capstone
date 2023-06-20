@@ -9,7 +9,7 @@ import HomePage from "./pages/HomePage";
 import Employees from "./pages/Employees";
 import Assets from "./pages/Assets";
 import Jobs from "./pages/Jobs";
-import Admin from "./pages/Admin";
+import Lookups from "./pages/Lookups";
 
 export default function App() {
   return (
@@ -22,8 +22,7 @@ export default function App() {
           <Route path="/employees" element={<Employees />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/jobs" element={<Jobs />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/:key" element={<Admin />} />
+          <Route path="/lookups" element={<Lookups />} />
         </Routes>
       </HashRouter>
     </div>

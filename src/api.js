@@ -16,8 +16,4 @@ export const assets = crud('assets');
 export const employees = crud('employees');
 export const jobs = crud('jobs');
 
-export const faults = crud('faults');
-export const priorities = crud('priorities');
-export const skills = crud('skills');
-export const statuses = crud('statuses');
-export const types = crud('types');
+export const lookups = crud('lookups');

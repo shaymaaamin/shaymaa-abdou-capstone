@@ -3,50 +3,36 @@ import * as api from "../api";
 
 import CRUD from "../components/CRUD/CRUD";
 
-function Assets() {
+function Lookups() {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
 
-    const [types, setTypes] = useState([]);
-
-    useEffect(() => {
-        api.lookups.get().then(data => {
-            const types = data.filter(({ kind }) => kind === 'type').map(({ id, name }) => ({ value: id, label: name }));
-            setTypes(types);
-        }).catch(setError);
-    }, []);
-
+    const options = ['fault', 'priority', 'skill', 'status', 'type'];
     const fields = [
+        { key: 'kind', label: 'Kind', type: 'select', options },
         { key: 'name', label: 'Name' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        { key: 'type_id', label: 'Type', type: 'select', options: types },
-        { key: 'lat', label: 'lat' },
-        { key: 'lng', label: 'lng' },
     ];
 
     const getTitle = (item) => item ? `${item.name}` : '';
 
-
-
     const loadData = () =>
-        api.assets.get()
+        api.lookups.get()
             .then((data) => setData(data))
             .catch((error) => setError(error.message));
-
 
     const addEditDelete = (mode, item) => {
         let operation = Promise.resolve();
         switch (mode) {
             case 'add':
-                operation = api.assets.add(item);
+                operation = api.lookups.add(item);
                 break;
 
             case 'edit':
-                operation = api.assets.update(item.id, item);
+                operation = api.lookups.update(item.id, item);
                 break;
 
             case 'delete':
-                operation = api.assets.delete(item.id);
+                operation = api.lookups.delete(item.id);
                 break;
 
             default:
@@ -57,7 +43,7 @@ function Assets() {
 
     return (
         <CRUD
-            header="Asset"
+            header="Lookup"
             data={data}
             fields={fields}
             error={error}
@@ -68,4 +54,4 @@ function Assets() {
         />
     )
 }
-export default Assets;
+export default Lookups;
