@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Icon, Pagination } from "semantic-ui-react";
+import { useNavigate } from "react-router-dom";
 
 import * as api from "../../api";
 
 import AddEditForm from "../CRUD/AddEditForm/AddEditForm";
 
-export default function Sidebar({ selectedAsset, selectAsset, assets }) {
+export default function Sidebar({ assets, employees, lookups, selectedAsset, setSelectedAsset }) {
+    const navigateTo = useNavigate();
     const [displayForm, setDisplayForm] = useState(false);
     const [error, setError] = useState(null);
     const [dataState, dispatch] = useState({ mode: null, item: null, success: false });
@@ -22,30 +24,33 @@ export default function Sidebar({ selectedAsset, selectAsset, assets }) {
     ];
 
     useEffect(() => {
-        api.lookups.get().then(data => {
-            const faults = data.filter(({ kind }) => kind === 'fault').map(({ id, name }) => ({ value: id, label: name }));
-            const priorities = data.filter(({ kind }) => kind === 'priority').map(({ id, name }) => ({ value: id, label: name }));
-            setFaults(faults);
-            setPriorities(priorities);
-        }).catch(setError);
-    }, []);
+        const faults = lookups.filter(({ kind }) => kind === 'fault').map(({ id, name }) => ({ value: id, label: name }));
+        const priorities = lookups.filter(({ kind }) => kind === 'priority').map(({ id, name }) => ({ value: id, label: name }));
+        setFaults(faults);
+        setPriorities(priorities);
+    }, [lookups]);
+
+    const getAssetType = (asset) => {
+        return lookups.find(({ id }) => id === asset?.type_id)?.name;
+    }
 
     const reportFault = () => {
         dispatch({ mode: 'add' });
     }
 
     const switchAsset = (idx) => {
-        selectAsset(assets[idx - 1]);
+        setSelectedAsset(assets[idx - 1]);
         setDisplayForm(false);
     }
 
     useEffect(() => {
         const { mode, item, success } = dataState;
         if (mode && item && success) {
-            api.jobs.add({ ...item, asset_id: selectedAsset.id })
+            api.jobs.add({ ...item, asset_id: selectedAsset.id, employee_id: employees[0].id })
+                .then(id => navigateTo(`/jobs/${id}`))
                 .then(() => dispatch({ mode: null, item: null, success: false }))
                 .then(() => setError(null))
-                .catch((error) => setError(error.message));
+                .catch((error) => setError(error.message))
         } else {
             setError(null);
         }
@@ -58,7 +63,7 @@ export default function Sidebar({ selectedAsset, selectAsset, assets }) {
                     <Card.Content>
                         <Card.Header>{selectedAsset?.name}</Card.Header>
                         <Card.Description>{selectedAsset?.description}</Card.Description>
-                        <Card.Content>type: {selectedAsset?.type}</Card.Content>
+                        <Card.Content>type: {getAssetType(selectedAsset)}</Card.Content>
                         {displayForm ? null : <Button color="red" floated="right" content="Report Fault" onClick={() => reportFault()} />}
                     </Card.Content>
                 </Card>

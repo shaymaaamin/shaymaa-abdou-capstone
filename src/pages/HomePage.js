@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadGoogleMapsAPI } from "../maps";
+import { getDistance, loadGoogleMapsAPI } from "../maps";
 
 import * as api from "../api";
 
@@ -13,31 +13,55 @@ export default function HomePage() {
   const [map, setMap] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [assets, setAssets] = useState([]);
-  const [jobs, setJobs] = useState([]);
+  const [lookups, setLookups] = useState([]);
+  const [skills, setSkills] = useState([]);
 
-  const [selectedAsset, selectAsset] = useState(null);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
   useEffect(() => {
     loadGoogleMapsAPI().then((map) => setMap(map));
     api.assets.get().then((assets) => setAssets(assets));
     api.employees.get().then((employees) => setEmployees(employees));
+    api.lookups.get().then((lookups) => setLookups(lookups));
+    api.skills.get().then((skills) => setSkills(skills));
   }, []);
 
-  useEffect(()=>{
-    selectAsset(assets[0]);
-  },[assets])
+  useEffect(() => {
+    setSelectedAsset(assets[0]);
+  }, [assets]);
+
+  useEffect(() => {
+    employees.forEach(e => e.distance = getDistance(e, selectedAsset));
+    employees.sort((a, b) => a.distance - b.distance);
+  }, [selectedAsset]);
 
   return (
     <Grid>
       <Grid.Row>
         <Grid.Column width={4}>
-          <Sidebar assets={assets} selectedAsset={selectedAsset} selectAsset={selectAsset} />
+          <Sidebar
+            assets={assets}
+            employees={employees}
+            lookups={lookups}
+            setSelectedAsset={setSelectedAsset}
+            selectedAsset={selectedAsset}
+          />
         </Grid.Column>
         <Grid.Column width={9}>
-          <LiveMap map={map} assets={assets} selectedAsset={selectedAsset} />
+          <LiveMap
+            map={map}
+            assets={assets}
+            selectedAsset={selectedAsset}
+          />
         </Grid.Column>
         <Grid.Column width={3}>
-          <ContactList employees={employees} map={map} />
+          <ContactList
+            map={map}
+            employees={employees}
+            skills={skills}
+            lookups={lookups}
+            selectedAsset={selectedAsset}
+          />
         </Grid.Column>
       </Grid.Row>
     </Grid>

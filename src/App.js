@@ -10,6 +10,7 @@ import Employees from "./pages/Employees";
 import Assets from "./pages/Assets";
 import Jobs from "./pages/Jobs";
 import Lookups from "./pages/Lookups";
+import JobDetails from "./pages/JobDetails";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/employees" element={<Employees />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/jobs" element={<Jobs />} />
+          <Route path="/jobs/:id" element={<JobDetails />} />
           <Route path="/lookups" element={<Lookups />} />
         </Routes>
       </HashRouter>
