@@ -11,7 +11,7 @@ function AddEditForm({ header, error, mode, fields, item, setDispatcher, setForm
     const { getInputProps, onSubmit, setValues, values } = useForm({ initialValues });
 
     useEffect(() => {
-        setFormValues(values);
+        setFormValues && setFormValues(values);
     }, [values]);
 
     useEffect(() => {
