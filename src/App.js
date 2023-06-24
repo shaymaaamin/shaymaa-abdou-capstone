@@ -1,6 +1,6 @@
 import "./App.scss";
 
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Topnav from "./components/Topnav/Topnav";
 import ScrollToTop from "./helpers/ScrollToTop";
@@ -15,7 +15,7 @@ import JobDetails from "./pages/JobDetails";
 export default function App() {
   return (
     <div className="app">
-      <HashRouter>
+      <BrowserRouter>
         <Topnav />
         <ScrollToTop />
         <Routes>
@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/jobs/:id" element={<JobDetails />} />
           <Route path="/lookups" element={<Lookups />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </div>
   );
 }
