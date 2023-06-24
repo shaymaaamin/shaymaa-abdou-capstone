@@ -10,8 +10,12 @@ function Employees() {
     const fields = [
         { key: 'first_name', label: 'First Name' },
         { key: 'last_name', label: 'Last Name' },
+        { key: 'title', label: 'Title' },
+        { key: 'status', label: 'Status' },
         { key: 'email_address', label: 'Email' },
         { key: 'phone_number', label: 'Phone' },
+        { key: 'lat', label: 'Latitude' },
+        { key: 'lng', label: 'Longitude' },
     ];
 
     const getTitle = (item) => item ? `${item.first_name} ${item.last_name}` : '';
