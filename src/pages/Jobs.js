@@ -29,6 +29,7 @@ function Jobs() {
 
     const fields = [
         { key: 'title', label: 'Title' },
+        { key: 'created_at', label: 'Date', type: 'label' },
         { key: 'description', label: 'Description', type: 'textarea' },
         { key: 'asset_id', label: 'Asset', type: 'select', options: assets },
         { key: 'fault_id', label: 'Fault', type: 'select', options: faults },

@@ -66,7 +66,8 @@ function AddEditForm({ header, error, mode, fields, item, setDispatcher, setForm
                                     );
                                     break;
                                 case 'label':
-                                    field = (
+                                    value = value || item?.[key];
+                                    field = (value &&
                                         <Input.Wrapper label={label}>
                                             <div style={{ margin: '0.5rem 0' }}>
                                                 <Label>{value}</Label>
