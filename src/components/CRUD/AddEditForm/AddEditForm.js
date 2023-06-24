@@ -6,7 +6,7 @@ import { TextInput, Textarea, Select, Input } from '@mantine/core';
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 function AddEditForm({ header, error, mode, fields, item, setDispatcher, setFormValues }) {
-    const initialValues = fields.reduce((acc, { key }) => ({ ...acc, [key]: '' }), { ...item });
+    const initialValues = fields.reduce((acc, { key }) => Object.assign(acc, key ? { [key]: '' } : {}), { ...item });
 
     const { getInputProps, onSubmit, setValues, values } = useForm({ initialValues });
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Grid } from "semantic-ui-react";
 import { getDistance, loadGoogleMapsAPI } from "../maps";
 
 import * as api from "../api";
@@ -6,24 +7,48 @@ import * as api from "../api";
 import ContactList from "../components/ContactList/ContactList";
 import LiveMap from "../components/LiveMap/LiveMap";
 import Sidebar from "../components/Sidebar/Sidebar";
-
-import { Grid } from "semantic-ui-react";
+import ReportFault from "../components/ReportFault/ReportFault";
 
 export default function HomePage() {
   const [map, setMap] = useState(null);
-  const [employees, setEmployees] = useState([]);
-  const [assets, setAssets] = useState([]);
-  const [lookups, setLookups] = useState([]);
-  const [skills, setSkills] = useState([]);
+  const [error, setError] = useState(null);
+  const [formValues, setFormValues] = useState({});
 
+  const [assets, setAssets] = useState([]);
+  const [employees, setEmployees] = useState([]);
+
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [selectedAsset, setSelectedAsset] = useState(null);
+
+  const [lookups, setLookups] = useState([]);
+  const [dispatcher, setDispatcher] = useState({ mode: null, item: null, success: false });
 
   useEffect(() => {
     loadGoogleMapsAPI().then((map) => setMap(map));
-    api.assets.get().then((assets) => setAssets(assets));
-    api.employees.get().then((employees) => setEmployees(employees));
-    api.lookups.get().then((lookups) => setLookups(lookups));
-    api.skills.get().then((skills) => setSkills(skills));
+
+    Promise.all([
+      api.assets.get(),
+      api.employees.get(),
+      api.skills.get(),
+      api.lookups.get()
+    ]).then(([assets, employees, employeeSkills, lookups]) => {
+
+      assets.forEach(a => {
+        a.type = lookups.find(l => l.id === a.type_id).name;
+      });
+
+      employees.forEach(e => {
+        e.skills = employeeSkills
+          .filter(s => s.employee_id === e.id)
+          .map(s => lookups.find(l => l.id === s.skill_id));
+      })
+
+      setAssets(assets);
+      setEmployees(employees);
+      setLookups(lookups);
+
+    }).catch(setError);
+
   }, []);
 
   useEffect(() => {
@@ -31,9 +56,19 @@ export default function HomePage() {
   }, [assets]);
 
   useEffect(() => {
-    employees.forEach(e => e.distance = getDistance(e, selectedAsset));
-    employees.sort((a, b) => a.distance - b.distance);
-  }, [selectedAsset]);
+    const employeesWithDistance = employees
+      .map(e => ({ ...e, distance: getDistance(e, selectedAsset) }))
+      .sort((a, b) => a.distance - b.distance);
+
+    const filteredEmployees = employeesWithDistance
+      .filter(e => e.status === 'online' && (!formValues?.skill_id || e.skills.some(s => s.id === formValues.skill_id)));
+
+
+    setSelectedEmployee(filteredEmployees[0] || employeesWithDistance[0]);
+
+  }, [selectedAsset, formValues]);
+
+
 
   return (
     <Grid>
@@ -41,10 +76,17 @@ export default function HomePage() {
         <Grid.Column width={4}>
           <Sidebar
             assets={assets}
-            employees={employees}
-            lookups={lookups}
-            setSelectedAsset={setSelectedAsset}
             selectedAsset={selectedAsset}
+            setSelectedAsset={setSelectedAsset}
+            setDispatcher={setDispatcher}
+          />
+          <ReportFault
+            lookups={lookups}
+            dispatcher={dispatcher}
+            setDispatcher={setDispatcher}
+            setFormValues={setFormValues}
+            selectedAsset={selectedAsset}
+            selectedEmployee={selectedEmployee}
           />
         </Grid.Column>
         <Grid.Column width={9}>
@@ -58,9 +100,8 @@ export default function HomePage() {
           <ContactList
             map={map}
             employees={employees}
-            skills={skills}
-            lookups={lookups}
-            selectedAsset={selectedAsset}
+            selectedEmployee={selectedEmployee}
+            setSelectedEmployee={setSelectedEmployee}
           />
         </Grid.Column>
       </Grid.Row>

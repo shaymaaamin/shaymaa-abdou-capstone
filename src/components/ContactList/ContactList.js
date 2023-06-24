@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card, Icon, Label } from "semantic-ui-react";
 import { addMarker } from "../../maps";
+import EmployeeCard from "../EmployeeCard/EmployeeCard";
 
-export default function ContactList({ employees, lookups, skills, map }) {
+export default function ContactList({ map, employees, selectedEmployee, setSelectedEmployee }) {
     const [markers, setMarkers] = useState([]);
-    const [selectedEmployee, selectEmployee] = useState(null);
 
     useEffect(() => {
         if (!window.google) return;
@@ -20,69 +20,16 @@ export default function ContactList({ employees, lookups, skills, map }) {
         setMarkers(newMarkers);
     }, [employees, map, selectedEmployee]);
 
-    const statusColors = {
-        online: 'green',
-        busy: 'orange',
-        away: 'yellow',
-        offline: 'grey',
-    }
-
-    const colors = [
-        'red',
-        'olive',
-        'orange',
-        'green',
-        'yellow',
-        'teal',
-        'violet',
-        'brown',
-        'purple',
-        'blue',
-        'grey',
-        'pink',
-        'black',
-    ];
-
-    const hasSkills = (employee) => {
-        return getSkills(employee).length > 0;
-    }
-
-    const getSkills = (employee) => {
-        return skills
-            .filter(s => s.employee_id === employee.id)
-            .map(s => lookups.find(l => l.id === s.skill_id));
-    }
 
 
     return (
-        <Card.Group style={{ width: '100%' }}>
+        <Card.Group style={{ width: '100%', height: '500px', overflowY: 'auto' }}>
             {employees
                 .map((employee) => (
-                    <Card key={employee.id} onClick={() => selectEmployee(employee)}>
-                        <Card.Content>
-                            <Card.Header>
-                                <Icon name="user" color={statusColors[employee.status]} />
-                                {employee.first_name} {employee.last_name}
-                            </Card.Header>
-                            <Card.Meta>{employee.title}</Card.Meta>
-                            <Card.Description>
-                                {employee.distance} km
-                            </Card.Description>
-                        </Card.Content>
-                        {hasSkills(employee) &&
-                            <Card.Content extra>
-                                {
-                                    getSkills(employee)
-                                        .map((skill, i) => (
-                                            <Label
-                                                color={colors[i]}
-                                                style={{ margin: '0.1rem' }}
-                                            >{skill.name}</Label>
-                                        ))
-                                }
-                            </Card.Content>
-                        }
-                    </Card>
+                    <EmployeeCard
+                        key={employee.id}
+                        employee={employee}
+                        onClick={() => setSelectedEmployee(employee)} />
                 ))}
         </Card.Group>
     );
