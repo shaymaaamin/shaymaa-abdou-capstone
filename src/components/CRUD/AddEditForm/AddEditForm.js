@@ -1,15 +1,18 @@
 import { useEffect } from "react";
 import { useForm } from '@mantine/form';
-import { Button, Modal } from "semantic-ui-react";
-import { TextInput, Textarea, Select } from '@mantine/core';
+import { Button, Label, Modal } from "semantic-ui-react";
+import { TextInput, Textarea, Select, Input } from '@mantine/core';
 
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-function AddEditForm({ header, error, mode, fields, item, setDispatcher }) {
+function AddEditForm({ header, error, mode, fields, item, setDispatcher, setFormValues }) {
     const initialValues = fields.reduce((acc, { key }) => ({ ...acc, [key]: '' }), { ...item });
 
-    const { getInputProps, onSubmit, setValues } = useForm({ initialValues });
+    const { getInputProps, onSubmit, setValues, values } = useForm({ initialValues });
 
+    useEffect(() => {
+        setFormValues(values);
+    }, [values]);
 
     useEffect(() => {
         setValues({ ...initialValues, ...item });
@@ -40,7 +43,7 @@ function AddEditForm({ header, error, mode, fields, item, setDispatcher }) {
                 <ErrorMessage error={error} />
                 <form onSubmit={onSubmit(handleSubmit)}>
                     {
-                        fields.map(({ key, label, type, options }) => {
+                        fields.map(({ key, label, value, type, options }) => {
                             let field;
                             switch (type) {
                                 case 'select':
@@ -60,6 +63,15 @@ function AddEditForm({ header, error, mode, fields, item, setDispatcher }) {
                                             label={label}
                                             {...getInputProps(key)}
                                         />
+                                    );
+                                    break;
+                                case 'label':
+                                    field = (
+                                        <Input.Wrapper label={label}>
+                                            <div style={{ margin: '0.5rem 0' }}>
+                                                <Label>{value}</Label>
+                                            </div>
+                                        </Input.Wrapper>
                                     );
                                     break;
                                 default:
