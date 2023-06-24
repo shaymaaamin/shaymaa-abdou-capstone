@@ -5,7 +5,7 @@ import { TextInput, Textarea, Select } from '@mantine/core';
 
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-function AddEditForm({ header, error, mode, fields, item, dispatch }) {
+function AddEditForm({ header, error, mode, fields, item, setDispatcher }) {
     const initialValues = fields.reduce((acc, { key }) => ({ ...acc, [key]: '' }), { ...item });
 
     const { getInputProps, onSubmit, setValues } = useForm({ initialValues });
@@ -17,13 +17,13 @@ function AddEditForm({ header, error, mode, fields, item, dispatch }) {
 
     // Form onSubmit
     const handleSubmit = (item) => {
-        dispatch({ mode, item, success: true });
+        setDispatcher({ mode, item, success: true });
         setValues({ ...initialValues, ...item });
     };
 
     // Modal onClose
     const onClose = () => {
-        dispatch({ mode: null, item, success: false });
+        setDispatcher({ mode: null, item, success: false });
         setValues({ ...initialValues, ...item });
     };
 

@@ -1,13 +1,13 @@
 import { Confirm, Modal } from "semantic-ui-react";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-function ConfirmDelete({ header, mode, item, getTitle, error, dispatch }) {
+function ConfirmDelete({ header, mode, item, getTitle, error, setDispatcher }) {
     return <Confirm
         size="mini"
         header={`Delete ${header}`}
         open={mode === 'delete'}
-        onCancel={() => dispatch({ mode: null })}
-        onConfirm={() => dispatch({ item, mode: 'delete', success: true })}
+        onCancel={() => setDispatcher({ mode: null })}
+        onConfirm={() => setDispatcher({ item, mode: 'delete', success: true })}
         content={
             <Modal.Content>
                 <ErrorMessage error={error} />
