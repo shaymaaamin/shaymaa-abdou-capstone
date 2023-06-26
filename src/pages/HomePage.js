@@ -56,15 +56,14 @@ export default function HomePage() {
   }, [assets]);
 
   useEffect(() => {
-    const employeesWithDistance = employees
-      .map(e => ({ ...e, distance: getDistance(e, selectedAsset) }))
-      .sort((a, b) => a.distance - b.distance);
+    employees.forEach(e => e.distance = getDistance(e, selectedAsset));
+    employees.sort((a, b) => a.distance - b.distance);
 
-    const filteredEmployees = employeesWithDistance
+    const filteredEmployees = employees
       .filter(e => e.status === 'online' && (!formValues?.skill_id || e.skills.some(s => s.id === formValues.skill_id)));
 
 
-    setSelectedEmployee(filteredEmployees[0] || employeesWithDistance[0]);
+    setSelectedEmployee(filteredEmployees[0] || employees[0]);
 
   }, [selectedAsset, formValues]);
 
