@@ -1,0 +1,23 @@
+@import "../../styles/partials/global";
+@import "../../styles/partials/vars";
+
+.topnav {
+  background-color: $color-primary;
+  margin-bottom: $gutter-sm;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $color-white;
+    padding: $gutter-sm;
+    border-bottom: 2px solid transparent;
+
+    &--active {
+      border-color: currentColor;
+    }
+  }
+}

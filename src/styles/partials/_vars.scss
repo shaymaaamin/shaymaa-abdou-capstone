@@ -1,0 +1,17 @@
+$color-primary: green;
+$color-white: white;
+$color-grey: grey;
+
+$card-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+  0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+
+$gutter-sm: 1rem;
+$gutter-xs: 0.75rem;
+
+$border-radius: calc($gutter-sm / 4);
+
+$fs-xs: 0.75rem;
+$fs-sm: 1rem;
+$fs-md: 2rem;
+
+$fw-bold: bold;
