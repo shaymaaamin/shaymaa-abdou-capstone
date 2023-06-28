@@ -76,6 +76,7 @@ function Jobs() {
             getTitle={getTitle}
             loadData={loadData}
             addEditDelete={addEditDelete}
+            enableAdd={false}
         />
     )
 }

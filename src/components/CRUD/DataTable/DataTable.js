@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Icon, Pagination, Table } from "semantic-ui-react";
 
-function DataTable({ data, fields, setDispatcher }) {
+function DataTable({ data, fields, setDispatcher, enableAdd = true }) {
     const pageSize = 5;
     const totalPages = Math.ceil(data.length / pageSize);
     const [activePage, setActivePage] = useState(1);
@@ -19,7 +19,7 @@ function DataTable({ data, fields, setDispatcher }) {
                         <Table.HeaderCell key={key}>{label}</Table.HeaderCell>
                     ))}
                     <Table.HeaderCell collapsing colSpan="2">
-                        <Button icon="add" color="green" onClick={(e) => setDispatcher({ mode: 'add' })} />
+                        {enableAdd && <Button icon="add" color="green" onClick={(e) => setDispatcher({ mode: 'add' })} />}
                     </Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
