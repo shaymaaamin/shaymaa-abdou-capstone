@@ -6,7 +6,7 @@ import ErrorMessage from "./ErrorMessage/ErrorMessage";
 import AddEditForm from "./AddEditForm/AddEditForm";
 import DataTable from "./DataTable/DataTable";
 
-function CRUD({ header, data, fields, getTitle, error, setError, loadData, addEditDelete }) {
+function CRUD({ header, data, fields, getTitle, error, setError, loadData, addEditDelete, enableAdd = true }) {
     const [dispatcher, setDispatcher] = useState({ mode: null, item: null, success: false });
 
 
@@ -35,7 +35,7 @@ function CRUD({ header, data, fields, getTitle, error, setError, loadData, addEd
             <ConfirmDelete header={header} mode={dispatcher.mode} item={dispatcher.item} getTitle={getTitle} error={error} setDispatcher={setDispatcher} />
             <ErrorMessage error={!dispatcher.mode && error} />
             <AddEditForm header={header} mode={dispatcher.mode} item={dispatcher.item} fields={fields} error={error} setDispatcher={setDispatcher} />
-            <DataTable data={data} fields={fields} setDispatcher={setDispatcher} />
+            <DataTable data={data} fields={fields} setDispatcher={setDispatcher} enableAdd={enableAdd} />
         </Container >
     )
 }

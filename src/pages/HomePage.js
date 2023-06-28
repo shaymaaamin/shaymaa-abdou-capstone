@@ -14,6 +14,7 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [formValues, setFormValues] = useState({});
 
+  const [jobs, setJobs] = useState([]);
   const [assets, setAssets] = useState([]);
   const [employees, setEmployees] = useState([]);
 
@@ -27,11 +28,12 @@ export default function HomePage() {
     loadGoogleMapsAPI().then((map) => setMap(map));
 
     Promise.all([
+      api.jobs.get(),
       api.assets.get(),
       api.employees.get(),
       api.skills.get(),
       api.lookups.get()
-    ]).then(([assets, employees, employeeSkills, lookups]) => {
+    ]).then(([jobs, assets, employees, employeeSkills, lookups]) => {
 
       assets.forEach(a => {
         a.type = lookups.find(l => l.id === a.type_id).name;
@@ -43,6 +45,7 @@ export default function HomePage() {
           .map(s => lookups.find(l => l.id === s.skill_id));
       })
 
+      setJobs(jobs);
       setAssets(assets);
       setEmployees(employees);
       setLookups(lookups);
@@ -74,7 +77,9 @@ export default function HomePage() {
       <Grid.Row>
         <Grid.Column width={4}>
           <Sidebar
+            jobs={jobs}
             assets={assets}
+            lookups={lookups}
             selectedAsset={selectedAsset}
             setSelectedAsset={setSelectedAsset}
             setDispatcher={setDispatcher}
